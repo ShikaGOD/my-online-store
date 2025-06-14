@@ -4,7 +4,6 @@ const getProducts = async () => {
     return products;
 }
 
-
 const renderProducts = async () => {
     const products = await getProducts()
     console.log(products);
@@ -38,6 +37,18 @@ const renderProducts = async () => {
     }
 }
 
+const removeProductFromCart = (event) => {
+    event.target.parentElement.parentElement.remove();
+    const cartListItems = document.getElementsByClassName("cart-list-item");
+    updateCartTotal();
+    if (!cartListItems.length) {
+        const cartListWrapper = document.querySelector(".cart-list-wrapper");
+        const emptyCartTitle = document.querySelector(".cart-empty-title");
+        cartListWrapper.style.display = "none";
+        emptyCartTitle.style.display = "block";
+    }
+}
+
 const addToCart = (product) => {
     const cartItems = document.getElementsByClassName("cart-list-item");
     for (const item of cartItems) {
@@ -65,7 +76,7 @@ const addToCart = (product) => {
     const quantity = document.createElement("input");
     const removeBtn = document.createElement("button");
     quantity.addEventListener("change", updateCartTotal);
-    removeBtn.addEventListener("click", (event) => removeProductFromCart());
+    removeBtn.addEventListener("click", (event) => removeProductFromCart(event));
 
     cartListItem.classList.add("cart-list-item");
     cartListImgSection.classList.add(
