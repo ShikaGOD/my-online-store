@@ -40,6 +40,16 @@ const renderProducts = async () => {
 
 const addToCart = (product) => {
     const cartItems = document.getElementsByClassName("cart-list-item");
+    for (const item of cartItems) {
+        if (product.id === +item.getAttribute("id")) {
+            const quantityInput = item.querySelector(
+                ".cart-list-quantity-section > input"
+            );
+            quantityInput.value++;
+            updateCartTotal();
+            return;
+        }
+    }
 
     const cart = document.querySelector('.cart-list');
     const emptyCartTitle = document.querySelector(".cart-empty-title");
@@ -91,7 +101,7 @@ const addToCart = (product) => {
         cartListQuantitySection
     );
     cart.appendChild(cartListItem);
-    
+
 }
 
 renderProducts();
