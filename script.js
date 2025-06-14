@@ -104,4 +104,17 @@ const addToCart = (product) => {
 
 }
 
+const updateCartTotal = () => {
+    const totalAmount = document.querySelector(".total-amount > span");
+    const cartItems = document.getElementsByClassName("cart-list-item");
+    let total = 0;
+    for (const item of cartItems) {
+        const price = item.querySelector(".cart-list-price-section > span");
+        const quantity = item.querySelector(".cart-list-quantity-section > input");
+        const currentAmount = parseFloat(price.innerText) * quantity.value;
+        total += currentAmount;
+    }
+    totalAmount.innerText = `${total}$`;
+}
+
 renderProducts();
