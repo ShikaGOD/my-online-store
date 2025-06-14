@@ -4,10 +4,11 @@ const getProducts = async () => {
     return products;
 }
 
-console.log(getProducts);
 
 const renderProducts = async () => {
     const products = await getProducts()
+    console.log(products);
+
     const container = document.querySelector('.products-container')
     for (const item of products) {
         const productWrapper = document.createElement('li');
@@ -23,8 +24,9 @@ const renderProducts = async () => {
         productImage.src = item.image;
         productTitle.innerText = item.title;
         productDescription.innerText = item.description;
-        productPrice.innerText = item.price;
+        productPrice.innerText = `${item.price}$`;
         productAddBtn.innerText = 'Add to cart'
+        productAddBtn.addEventListener('click', () => addToCart(item))
 
         productPriceSection.append(productPrice, productAddBtn);
         productWrapper.append(
@@ -34,6 +36,62 @@ const renderProducts = async () => {
             productPriceSection);
         container.append(productWrapper)
     }
+}
+
+const addToCart = (product) => {
+    const cartItems = document.getElementsByClassName("cart-list-item");
+
+    const cart = document.querySelector('.cart-list');
+    const emptyCartTitle = document.querySelector(".cart-empty-title");
+    const cartListWrapper = document.querySelector(".cart-list-wrapper");
+
+    const cartListItem = document.createElement("li");
+    const cartListImgSection = document.createElement("section");
+    const cartListPriceSection = document.createElement("section");
+    const cartListQuantitySection = document.createElement("section");
+    const image = document.createElement("img");
+    const title = document.createElement("h4");
+    const price = document.createElement("span");
+    const quantity = document.createElement("input");
+    const removeBtn = document.createElement("button");
+    quantity.addEventListener("change", updateCartTotal);
+    removeBtn.addEventListener("click", (event) => removeProductFromCart());
+
+    cartListItem.classList.add("cart-list-item");
+    cartListImgSection.classList.add(
+        "cart-list-item-section",
+        "cart-list-img-section"
+    );
+    cartListPriceSection.classList.add(
+        "cart-list-item-section",
+        "cart-list-price-section"
+    );
+    cartListQuantitySection.classList.add(
+        "cart-list-item-section",
+        "cart-list-quantity-section"
+    );
+
+    image.src = product.image;
+    title.innerText = product.title;
+    price.innerText = `${product.price}$`;
+    quantity.type = "number";
+    quantity.value = 1;
+    quantity.min = 1;
+    removeBtn.innerText = "REMOVE";
+    emptyCartTitle.style.display = "none";
+    cartListWrapper.style.display = "block";
+
+    cartListImgSection.append(image, title);
+    cartListPriceSection.appendChild(price);
+    cartListQuantitySection.append(quantity, removeBtn);
+    cartListItem.setAttribute("id", product.id);
+    cartListItem.append(
+        cartListImgSection,
+        cartListPriceSection,
+        cartListQuantitySection
+    );
+    cart.appendChild(cartListItem);
+    
 }
 
 renderProducts();
